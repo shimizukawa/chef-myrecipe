@@ -25,6 +25,8 @@ define :install_packages, :action => :install do
     packages.each do |pkg|
       if pkg.kind_of? String
         pkg = {"name" => pkg}
+      else
+        pkg = Hash[pkg]
       end
     
       package_src = nil
@@ -33,6 +35,10 @@ define :install_packages, :action => :install do
         package_src = "#{Chef::Config[:file_cache_path]}/#{pkg['name']}"
         cookbook_file package_src do
           cookbook pkg['cookbook']
+        end
+        if pkg['name'].rpartition('.').last == 'gem'
+          pkg['name'], _, pkg['version'] = pkg['name'].gsub(/\.gem$/,'').rpartition('-')
+          pkg['provider'] = 'gem'
         end
     
       elsif pkg['url']

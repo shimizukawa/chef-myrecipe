@@ -28,8 +28,16 @@ Attributes
             "cookbook": "target-cookbook",   //optional: use localfile if provided
             "url": "http://someurl.example.com/file/path.rpm"  //optional: download package if provided
         },
+        {"name": "librarian-chef",            "provider": "gem"},
+        {"name": "chef",                      "version": ">=11.6.0", "provider": "gem"},
+        {"name": "knife-solo-0.3.0.pre4.gem", "cookbook": "myrecipe"},
         { ... }
     ]
+
+* `node["myrecipe"]["install_local_gems"]["rbenv"]` - default is "global".
+* `node["myrecipe"]["install_local_gems"]["gems"]` - gem files to install from cookbook_file. default is [].
+* `node["myrecipe"]["install_local_gems"]["cookbook"]` - cookbook for files default is nil (current cookbook).
+
 
 * `node["myrecipe"]["mysql_grants"]` - mysql grants users. default is:
 
@@ -50,10 +58,6 @@ Attributes
         "key2": "value2"
       }
     }
-
-* `node["myrecipe"]["install_local_gems"]["rbenv"]` - default is "global".
-* `node["myrecipe"]["install_local_gems"]["gems"]` - gem files to install from cookbook_file. default is [].
-* `node["myrecipe"]["install_local_gems"]["cookbook"]` - cookbook for files default is nil (current cookbook).
 
 * `node["myrecipe"]["certificates"]["path"]` - certificates path. path permission will become 02700.
 
