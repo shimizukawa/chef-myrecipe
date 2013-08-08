@@ -1,0 +1,21 @@
+description "MHA"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn limit 5 60
+
+<%- if @work_dir -%>
+env WORK_DIR="<%= @work_dir %>"
+<%- end -%>
+env CONF_PATH="<%= @conf_path %>"
+
+pre-start script
+  <%- if @work_dir -%>
+  test -d $WORK_DIR || { stop ; exit 0; }
+  <%- end -%>
+  test -f $CONF_PATH || { stop ; exit 0; }
+end script
+
+exec sudo -u <%= @run_user %> /usr/bin/masterha_manager --conf=$CONF_PATH >> <%= @log_path %> 2>&1
+

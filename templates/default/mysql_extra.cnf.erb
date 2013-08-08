@@ -1,0 +1,9 @@
+# This file is managed by Chef, using the myrecipe cookbook.
+# Editing this file by hand is highly discouraged!
+
+<%- @params.each do |section, keyvalue| -%>
+[<%= section %>]
+<%- keyvalue.each do |key, value| -%>
+<%= key %> = <%= value %>
+<%- end -%>
+<%- end -%>
