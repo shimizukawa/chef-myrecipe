@@ -43,10 +43,46 @@ define :install_packages, :action => :install do
     
       end
     
-      package pkg['name'] do
-        source package_src
+      if pkg['provider'] == 'gem'
+        gem_package pkg['name'] do
+          source package_src
+          version pkg['version'] if pkg['version']
+        end
+      else
+        package pkg['name'] do
+          case pkg['provider']
+          when 'apt'
+            provider Chef::Provider::Package::Apt
+          when 'dpkg'
+            provider Chef::Provider::Package::Dpkg
+          when 'easy_install'
+            provider Chef::Provider::Package::EasyInstall
+          when 'freebsd'
+            provider Chef::Provider::Package::Freebsd
+          when 'ips'
+            provider Chef::Provider::Package::Ips
+          when 'macports'
+            provider Chef::Provider::Package::Macports
+          when 'pacman'
+            provider Chef::Provider::Package::Pacman
+          when 'portage'
+            provider Chef::Provider::Package::Portage
+          when 'rpm'
+            provider Chef::Provider::Package::Rpm
+          #when 'gem'
+          #  provider Chef::Provider::Package::Rubygems
+          when 'smartos'
+            provider Chef::Provider::Package::Smartos
+          when 'solaris'
+            provider Chef::Provider::Package::Solaris
+          when 'yum'
+            provider Chef::Provider::Package::Yum
+          end
+          source package_src
+          version pkg['version'] if pkg['version']
+        end
       end
-    
+
     end
 
   end
