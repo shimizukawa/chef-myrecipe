@@ -37,6 +37,7 @@ default["myrecipe"]["nginx_proxy"]["sites"] = [
 #        "return 200 'good.';",
 #        "#for health check."
 #      ]
-#    }
+#    },
+#    "nested_proxy": false
 #  }
 ]

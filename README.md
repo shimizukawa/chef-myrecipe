@@ -101,7 +101,8 @@ Attributes
             "return 200 'good.';",
             "#for health check."
           ]
-        }
+        },
+        "nested_proxy": false             //default is false. It is effective for ELB.
       }
    ]
 
