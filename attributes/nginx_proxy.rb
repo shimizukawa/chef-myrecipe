@@ -27,6 +27,7 @@ default["myrecipe"]["nginx_proxy"]["sites"] = [
 #    "client_max_body_size": "1024m",
 #    "ssl": true,
 #    "ssl_path": "/etc/ssl/private",
+#    "ssl_name": "server-name",
 #    "basicauth": {
 #      "realm": "realm name",
 #      "htpasswd": "htpasswd-file"

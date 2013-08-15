@@ -28,8 +28,8 @@ server {
 
 <% if @ssl -%>
   ssl on;
-  ssl_certificate <%= @ssl_path %>/<%= @site_name %>.crt;
-  ssl_certificate_key <%= @ssl_path %>/<%= @site_name %>.key;
+  ssl_certificate <%= @ssl_path %>/<%= @ssl_name %>.crt;
+  ssl_certificate_key <%= @ssl_path %>/<%= @ssl_name %>.key;
 <% end -%>
 
 <% if @max_upload_size -%>

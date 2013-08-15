@@ -91,6 +91,7 @@ Attributes
         "ssl": true,                      //default is false
         //if ssl is true, /etc/ssl/server-name.(key|crt) will be used.
         "ssl_path": "/etc/ssl/private",   //default is nil (using myrecipe.certificates.path)
+        "ssl_name": "server-name",        //for key, crt file. default is nil (using name value)
         "basicauth": {                    //default is nil
           "realm": "realm-name",
           "htpasswd": "htpasswd-file-path"

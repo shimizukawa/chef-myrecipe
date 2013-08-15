@@ -38,6 +38,7 @@ node.myrecipe.nginx_proxy.sites.each do |site|
       :www_redirect     => site['www_redirect'] || false,
       :max_upload_size  => site['client_max_body_size'] || nil,
       :ssl              => site['ssl'] || false,
+      :ssl_name         => site['ssl_name'] || site['name'],
       :ssl_path         => site['ssl_path'] || node.myrecipe.certificates.path || '/etc/ssl/private',
       :basicauth        => site['basicauth'] || nil,
     )
