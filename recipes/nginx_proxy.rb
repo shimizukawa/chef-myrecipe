@@ -41,6 +41,7 @@ node.myrecipe.nginx_proxy.sites.each do |site|
       :ssl_name         => site['ssl_name'] || site['name'],
       :ssl_path         => site['ssl_path'] || node.myrecipe.certificates.path || '/etc/ssl/private',
       :basicauth        => site['basicauth'] || nil,
+      :locations        => site['locations'] || {},
     )
   
     if File.exists?("#{node['nginx']['dir']}/sites-enabled/#{site_name}.conf")

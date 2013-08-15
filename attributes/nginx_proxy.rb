@@ -31,6 +31,12 @@ default["myrecipe"]["nginx_proxy"]["sites"] = [
 #    "basicauth": {
 #      "realm": "realm name",
 #      "htpasswd": "htpasswd-file"
+#    },
+#    "locations": {
+#      "= /_health": [
+#        "return 200 'good.';",
+#        "#for health check."
+#      ]
 #    }
 #  }
 ]

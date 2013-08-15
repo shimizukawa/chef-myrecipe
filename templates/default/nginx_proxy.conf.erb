@@ -30,12 +30,12 @@ server {
   ssl on;
   ssl_certificate <%= @ssl_path %>/<%= @ssl_name %>.crt;
   ssl_certificate_key <%= @ssl_path %>/<%= @ssl_name %>.key;
-<% end -%>
 
+<% end -%>
 <% if @max_upload_size -%>
   client_max_body_size <%= @max_upload_size %>;
-<% end -%>
 
+<% end -%>
   location / {
     proxy_pass http://<%= @site_name %>;
     proxy_set_header X-Real-IP $remote_addr;
@@ -53,6 +53,14 @@ server {
 <% end -%>
   }
 
+<% @locations.each do |name, lines| -%>
+  location <%= name %> {
+<% lines.each do |line| -%>
+    <%= line %>
+<% end -%>
+  }
+
+<% end -%>
   error_log         <%= node[:nginx][:log_dir] %>/<%= @site_name %>-error.log;
   access_log        <%= node[:nginx][:log_dir] %>/<%= @site_name %>-access.log;
 }

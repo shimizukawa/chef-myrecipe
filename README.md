@@ -95,6 +95,12 @@ Attributes
         "basicauth": {                    //default is nil
           "realm": "realm-name",
           "htpasswd": "htpasswd-file-path"
+        },
+        "locations": {                    //default is {}
+          "= /_health": [
+            "return 200 'good.';",
+            "#for health check."
+          ]
         }
       }
    ]
