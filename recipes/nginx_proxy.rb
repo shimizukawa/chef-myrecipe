@@ -22,13 +22,15 @@ include_recipe "nginx::source"
 
 node.myrecipe.nginx_proxy.sites.each do |site|
 
-  template "#{node['nginx']['dir']}/sites-available/#{site['name']}.conf" do
+  site_name = "#{site['name']}-#{site['ssl'] ? 'https': 'http'}"
+
+  template "#{node['nginx']['dir']}/sites-available/#{site_name}.conf" do
     source      "nginx_proxy.conf.erb"
     owner       'root'
     group       'root'
     mode        '0644'
     variables(
-      :site_name        => site['name'],
+      :site_name        => site_name,
       :host_name        => site['host_name'] || node['fqdn'],
       :host_aliases     => site['host_aliases'] || [],
       :listen_ports     => site['listen_ports'] || [8080],
@@ -40,12 +42,12 @@ node.myrecipe.nginx_proxy.sites.each do |site|
       :basicauth        => site['basicauth'] || nil,
     )
   
-    if File.exists?("#{node['nginx']['dir']}/sites-enabled/#{site['name']}.conf")
+    if File.exists?("#{node['nginx']['dir']}/sites-enabled/#{site_name}.conf")
       notifies  :restart, 'service[nginx]'
     end
   end
   
-  nginx_site "#{site['name']}.conf" do
+  nginx_site "#{site_name}.conf" do
     notifies :restart, "service[nginx]"
   end
 
