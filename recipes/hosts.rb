@@ -17,19 +17,17 @@
 # limitations under the License.
 #
 
-hosts = Chef::Util::FileEdit.new("/etc/hosts")
-item = data_bag_item('hosts', 'hosts')
-
 env_name = node.my_environment #FIXME: chef-solo (11.4.4) did not support "node.chef_environment" yet.
+item = data_bag_item('hosts', env_name)
 
-if item[env_name]
-  item[env_name].each do |h|
+if item
+  item.each do |id, h|
     next unless h['ipaddr']
     hostsfile_entry h['ipaddr'] do
-      hostname h['id']
+      hostname id
       aliases h['aliases']
     end
   end
 else
-  Chef::Log.warn("data_bags: hosts/hosts.json did not have '#{env_name}' key.")
+  Chef::Log.warn("data_bags: hosts/#{env_name} does not exist.")
 end

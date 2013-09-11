@@ -19,14 +19,14 @@
 
 env_name = node.my_environment #FIXME: chef-solo (11.4.4) did not support "node.chef_environment" yet.
 node_name = node.name
-hosts_item = data_bag_item('hosts', 'hosts')
+hosts_item = data_bag_item('hosts', env_name)
 hosts_names = [node_name]
 
-if hosts_item[env_name]
-  h = hosts_item[env_name].find do |h|
-    ([h['id'], h['id'].split('.').first] + (h['aliases'] || [])).include?(node_name)
+if hosts_item
+  id, h = hosts_item.find do |id, h|
+    ([id, id.split('.').first] + (h['aliases'] || [])).include?(node_name)
   end
-  hosts_names = ([h['id']] + (h['aliases'] || [])) if h
+  hosts_names = ([id] + (h['aliases'] || [])) if h
 end
 
 envnode_matcher = /^(#{env_name}|\*)\/(#{hosts_names.join('|')}|\*)$/

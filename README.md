@@ -117,65 +117,64 @@ Attributes
 Data bags
 ----------
 
-"myrecipe::hosts"
+file `data_bags/hosts/<my_environment>.json` used by `myrecipe::hosts`.
 
-- file: data_bags/hosts/hosts.json
-
-  {
-    "id": "hosts",
-    "personal": [
-      {
-        "id": "host-workstation",
-        "ipaddr": "192.168.1.1",
-        "aliases": [
-          "host-ap1",
-          "host-ap2",
-          ...
-        ]
-      }
-    ],
-    "vm": [
-      {
-        "id": "vm-host-01",
-        "ipaddr": "192.168.1.1",
-        "aliases": [
-          "host-workstation",
-          "host-ap1",
-          "host-ap2",
-          ...
-        ]
-      }
+example1, `data_bags/hosts/personal.json`:
+```json
+{
+  "id": "personal",
+  "host-workstation": {
+    "ipaddr": "192.168.1.1",
+    "aliases": [
+      "host-ap1",
+      "host-ap2",
+      ...
     ]
   }
+}
+```
 
-"myrecipe::certificates"
-
-- file: data_bags/certificates/certificates.json
-
-  {
-    "id": "certificates",
-    "keys": [
-      {
-        "filename": "jenkins",
-        "key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAKBgQDRmqAbqW...",
-        "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIIBsCCARsAQAwcEL...",
-        "crt": "-----BEGIN CERTIFICATE-----\nMIICWzCCAcQCCDjBUDiSKQgAN...",
-        "envnode": [
-          "bpvm/*"
-        ]
-      },
-      {
-        "filename": "rhodecode",
-        "key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQBAABgQM1sIOvCqA...",
-        "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIBxjCASCAQwgYxCA...",
-        "crt": "-----BEGIN CERTIFICATE-----\nMIICgzCCAeCCQrHh3AMoijNBk...",
-        "envnode": [
-          "bpvm/*"
-        ]
-      }
-    ]
+example2, `data_bags/hosts/production.json`:
+```json
+{
+  "id": "production",
+  "host-workstation": {
+    "ipaddr": "10.0.0.1"
+  },
+  "host-ap1": {
+    "ipaddr": "10.0.0.2",
   }
+}
+```
 
+
+file `data_bags/certificates/certificates.json` used by `myrecipe::certificates`:
+
+```json
+{
+  "id": "certificates",
+  "keys": [
+    {
+      "filename": "jenkins",
+      "key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAKBgQDRmqAbqW...",
+      "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIIBsCCARsAQAwcEL...",
+      "crt": "-----BEGIN CERTIFICATE-----\nMIICWzCCAcQCCDjBUDiSKQgAN...",
+      "envnode": [
+        "bpvm/*"
+      ]
+    },
+    {
+      "filename": "rhodecode",
+      "key": "-----BEGIN RSA PRIVATE KEY-----\nMIICXQBAABgQM1sIOvCqA...",
+      "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIBxjCASCAQwgYxCA...",
+      "crt": "-----BEGIN CERTIFICATE-----\nMIICgzCCAeCCQrHh3AMoijNBk...",
+      "envnode": [
+        "bpvm/*"
+      ]
+    }
+  ]
+}
+```
 
 Recipes
 -------
