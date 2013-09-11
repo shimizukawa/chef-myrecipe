@@ -1,5 +1,5 @@
 # Cookbook Name:: myrecipe
-# Attributes:: rhadcode
+# Attributes:: rhodecode
 #
 # Copyright 2013, Takayuki SHIMIZUKAWA
 #
