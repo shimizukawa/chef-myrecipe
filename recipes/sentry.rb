@@ -1,0 +1,103 @@
+#
+# Cookbook Name:: myrecipe
+# Recipe:: sentry
+#
+# Copyright 2013, Takayuki SHIMIZUKAWA
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in wrhiting, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+directory node.myrecipe.sentry.work_dir do
+  owner node.myrecipe.sentry.user
+  group node.myrecipe.sentry.group
+  mode "02755"
+end
+
+execute "virtualenv #{node.myrecipe.sentry.work_dir}" do
+  user node.myrecipe.sentry.user
+  group node.myrecipe.sentry.group
+  not_if {File.exists? node.myrecipe.sentry.work_dir}
+end
+
+execute "#{node.myrecipe.sentry.work_dir}/bin/pip install sentry[mysql]" do
+  user node.myrecipe.sentry.user
+  group node.myrecipe.sentry.group
+  not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/bin/sentry"}
+end
+
+template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
+  source      "sentry.conf.py.erb"
+  owner       node.myrecipe.sentry.user
+  group       node.myrecipe.sentry.group
+  mode        '0644'
+  if node.myrecipe.sentry.ini_cookbook
+    cookbook  node.myrecipe.sentry.ini_cookbook
+  end
+  variables(
+    :work_dir  => node.myrecipe.sentry.work_dir,
+    :bind_host => node.myrecipe.sentry.bind_host,
+    :bind_port => node.myrecipe.sentry.bind_port,
+    :proxy_proto => node.myrecipe.sentry.proxy_proto,
+    :udp_host  => node.myrecipe.sentry.udp_host,
+    :udp_port  => node.myrecipe.sentry.udp_port,
+    :user      => node.myrecipe.sentry.user,
+    :group     => node.myrecipe.sentry.group,
+    :workers   => node.myrecipe.sentry.workers,
+    :log_level => node.myrecipe.sentry.log_level,
+    :db_host   => node.myrecipe.sentry.db_host,
+    :db_port   => node.myrecipe.sentry.db_port,
+    :db_name   => node.myrecipe.sentry.db_name,
+    :db_user   => node.myrecipe.sentry.db_user,
+    :db_passwd => node.myrecipe.sentry.db_passwd,
+    :allow_registration => node.myrecipe.sentry.allow_registration,
+  )
+end
+
+#execute "#{node.myrecipe.sentry.work_dir}/bin/sentry init #{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
+#  cwd node.myrecipe.sentry.work_dir
+#  user node.myrecipe.sentry.user
+#  group node.myrecipe.sentry.group
+#  subscribes :run, resources(:template => "#{node.myrecipe.sentry.work_dir}/sentry.conf.py")
+#  #not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/xxxx.db"}
+#end
+
+execute "#{node.myrecipe.sentry.work_dir}/bin/sentry --config=#{node.myrecipe.sentry.work_dir}/sentry.conf.py upgrade" do
+  user node.myrecipe.sentry.user
+  group node.myrecipe.sentry.group
+  subscribes :run, resources(:template => "#{node.myrecipe.sentry.work_dir}/sentry.conf.py")
+end
+
+template "/etc/init/sentry.conf" do
+  source      "upstart-sentry.conf.erb"
+  owner       'root'
+  group       'root'
+  mode        '0644'
+  variables(
+    :work_dir  => node.myrecipe.sentry.work_dir,
+    #:bind      => node.myrecipe.sentry.bind,
+    :user      => node.myrecipe.sentry.user,
+    :group     => node.myrecipe.sentry.group,
+    #:workers   => node.myrecipe.sentry.workers,
+    #:log_level => node.myrecipe.sentry.log_level,
+  )
+end
+
+service 'sentry' do
+  provider Chef::Provider::Service::Upstart
+  enabled true
+  running true
+  supports :start => true, :restart => true, :reload => true, :status => true
+  action :start
+  subscribes :restart, resources(:template => "/etc/init/sentry.conf")
+end
+
