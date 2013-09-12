@@ -8,6 +8,7 @@ Requirements
 
 * depends "hostsfile" cookbook.
 * depends "logrotate" cookbook.
+* depends "rbenv" cookbook.
 
 
 Attributes
@@ -196,6 +197,7 @@ Recipes
 * `myrecipe::nginx_proxy` - setup nginx proxy site setting.
 * `myrecipe::rhodecode` - setup rhadcode application.
 * `myrecipe::remote_old_mongo` - uninstall old (before 2.4) mongodb packages.
+* `myrecipe::sentry` - install sentry.
 
 
 
