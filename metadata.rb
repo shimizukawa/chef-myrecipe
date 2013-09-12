@@ -3,7 +3,7 @@ maintainer_email "shimizukawa@beproud.jp"
 license          "Apache 2.0"
 description      "Installs/Configures myrecipe"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.5.0"
+version          "0.5.1"
 recipe           "myrecipe::install_packages", "install packages by os package command: as apt-get, yum"
 recipe           "myrecipe::rbenv_prepare", "preparation for rbenv depends libraries"
 recipe           "myrecipe::install_local_gems", "install gems from cookbook_file"
@@ -23,6 +23,7 @@ recipe           "myrecipe::mha_manager", "install mha manager"
 recipe           "myrecipe::nginx_proxy", "setup nginx proxy site setting"
 recipe           "myrecipe::rhodecode", "setup rhodecode application"
 recipe           "myrecipe::remote_old_mongo", "uninstall old (before 2.4) mongodb packages"
+recipe           "myrecipe::sentry", "install sentry"
 
 
 depends "hostsfile"

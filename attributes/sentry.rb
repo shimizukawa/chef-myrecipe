@@ -17,6 +17,8 @@
 #
 
 default["myrecipe"]["sentry"]["work_dir"] = "/var/www/sentry"
+default["myrecipe"]["sentry"]["url_prefix"] = ""
+default["myrecipe"]["sentry"]["url_subpath"] = nil
 default["myrecipe"]["sentry"]["bind_host"] = "127.0.0.1"
 default["myrecipe"]["sentry"]["bind_port"] = "9000"
 default["myrecipe"]["sentry"]["udp_host"] = "0.0.0.0"
@@ -26,6 +28,7 @@ default["myrecipe"]["sentry"]["user"] = "www"
 default["myrecipe"]["sentry"]["group"] = "www"
 default["myrecipe"]["sentry"]["workers"] = 2
 default["myrecipe"]["sentry"]["log_level"] = "info"
+default["myrecipe"]["sentry"]["log_dir"] = "/var/log/sentry"
 default["myrecipe"]["sentry"]["ini_cookbook"] = nil
 default["myrecipe"]["sentry"]["db_host"] = "localhost"
 default["myrecipe"]["sentry"]["db_port"] = 3306

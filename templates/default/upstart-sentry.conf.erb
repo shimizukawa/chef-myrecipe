@@ -23,6 +23,6 @@ end script
 
 script
   sleep 2
-  exec >> /var/log/days/sentry-console.log 2>&1
+  exec >> <%= @log_dir %>/sentry-console.log 2>&1
   exec $VENV/bin/sentry --config=$VENV/sentry.conf.py start
 end script

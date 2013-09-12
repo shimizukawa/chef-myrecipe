@@ -66,7 +66,11 @@ CACHES = {
 ################
 
 # You MUST configure the absolute URI root for Sentry:
-SENTRY_URL_PREFIX = 'http://dev.days7.jp'  # No trailing slash!
+SENTRY_URL_PREFIX = '<%= @url_prefix %>'  # No trailing slash!
+<%- if @url_subpath -%>
+FORCE_SCRIPT_NAME = '<%= @url_subpath %>'
+STATIC_URL = '<%= @url_subpath %>/_static/'
+<%- end -%>
 
 # If you're using a reverse proxy, you should enable the X-Forwarded-Proto
 # header, and uncomment the following setting
@@ -131,7 +135,7 @@ BITBUCKET_CONSUMER_SECRET = ''
 ##############
 # custom
 
-SENTRY_ALLOW_REGISTRATION = <%= @allow_registration %>
+SENTRY_ALLOW_REGISTRATION = <%= @allow_registration ? 'True': 'False' %>
 
 SENTRY_UDP_HOST = '<%= @udp_host %>'
 SENTRY_UDP_PORT = <%= @udp_port %>

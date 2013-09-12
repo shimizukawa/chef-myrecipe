@@ -23,10 +23,16 @@ directory node.myrecipe.sentry.work_dir do
   mode "02755"
 end
 
+directory node.myrecipe.sentry.log_dir do
+  owner node.myrecipe.sentry.user
+  group node.myrecipe.sentry.group
+  mode "02755"
+end
+
 execute "virtualenv #{node.myrecipe.sentry.work_dir}" do
   user node.myrecipe.sentry.user
   group node.myrecipe.sentry.group
-  not_if {File.exists? node.myrecipe.sentry.work_dir}
+  not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/bin/pip"}
 end
 
 execute "#{node.myrecipe.sentry.work_dir}/bin/pip install sentry[mysql]" do
@@ -45,6 +51,8 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
   end
   variables(
     :work_dir  => node.myrecipe.sentry.work_dir,
+    :url_prefix => node.myrecipe.sentry.url_prefix,
+    :url_subpath => node.myrecipe.sentry.url_subpath,
     :bind_host => node.myrecipe.sentry.bind_host,
     :bind_port => node.myrecipe.sentry.bind_port,
     :proxy_proto => node.myrecipe.sentry.proxy_proto,
@@ -54,6 +62,7 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
     :group     => node.myrecipe.sentry.group,
     :workers   => node.myrecipe.sentry.workers,
     :log_level => node.myrecipe.sentry.log_level,
+    :log_dir   => node.myrecipe.sentry.log_dir,
     :db_host   => node.myrecipe.sentry.db_host,
     :db_port   => node.myrecipe.sentry.db_port,
     :db_name   => node.myrecipe.sentry.db_name,
@@ -63,15 +72,7 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
   )
 end
 
-#execute "#{node.myrecipe.sentry.work_dir}/bin/sentry init #{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
-#  cwd node.myrecipe.sentry.work_dir
-#  user node.myrecipe.sentry.user
-#  group node.myrecipe.sentry.group
-#  subscribes :run, resources(:template => "#{node.myrecipe.sentry.work_dir}/sentry.conf.py")
-#  #not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/xxxx.db"}
-#end
-
-execute "#{node.myrecipe.sentry.work_dir}/bin/sentry --config=#{node.myrecipe.sentry.work_dir}/sentry.conf.py upgrade" do
+execute "#{node.myrecipe.sentry.work_dir}/bin/sentry --config=#{node.myrecipe.sentry.work_dir}/sentry.conf.py upgrade --noinput" do
   user node.myrecipe.sentry.user
   group node.myrecipe.sentry.group
   subscribes :run, resources(:template => "#{node.myrecipe.sentry.work_dir}/sentry.conf.py")
@@ -84,11 +85,9 @@ template "/etc/init/sentry.conf" do
   mode        '0644'
   variables(
     :work_dir  => node.myrecipe.sentry.work_dir,
-    #:bind      => node.myrecipe.sentry.bind,
     :user      => node.myrecipe.sentry.user,
     :group     => node.myrecipe.sentry.group,
-    #:workers   => node.myrecipe.sentry.workers,
-    #:log_level => node.myrecipe.sentry.log_level,
+    :log_dir   => node.myrecipe.sentry.log_dir,
   )
 end
 
