@@ -4,13 +4,11 @@
 # Local modifications will be overwritten.
 #
 
-<% if @upstream_servers.nil? || @upstream_servers.empty? -%>
 upstream <%= @site_name %> {
 <% @upstream_servers.each do |server| -%>
   server <%= server %>;
 <% end -%>
 }
-<% end -%>
 
 <% if @www_redirect -%>
 server {
