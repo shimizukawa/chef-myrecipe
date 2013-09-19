@@ -20,10 +20,7 @@
 include_recipe "nginx::source"
 
 
-node.myrecipe.nginx_proxy.sites.each do |site|
-
-  site_name = "#{site['name']}-#{site['ssl'] ? 'https': 'http'}"
-
+node.myrecipe.nginx_proxy.sites.each do |site_name, site|
   template "#{node['nginx']['dir']}/sites-available/#{site_name}.conf" do
     source      "nginx_proxy.conf.erb"
     owner       'root'
@@ -38,7 +35,7 @@ node.myrecipe.nginx_proxy.sites.each do |site|
       :www_redirect     => site['www_redirect'] || false,
       :max_upload_size  => site['client_max_body_size'] || nil,
       :ssl              => site['ssl'] || false,
-      :ssl_name         => site['ssl_name'] || site['name'],
+      :ssl_name         => site['ssl_name'],
       :ssl_path         => site['ssl_path'] || node.myrecipe.certificates.path || '/etc/ssl/private',
       :basicauth        => site['basicauth'] || nil,
       :locations        => site['locations'] || {},

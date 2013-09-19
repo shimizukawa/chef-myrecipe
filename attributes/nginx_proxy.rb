@@ -16,9 +16,8 @@
 # limitations under the License.
 #
 
-default["myrecipe"]["nginx_proxy"]["sites"] = [
-#  {
-#    "name": "server-name",
+default["myrecipe"]["nginx_proxy"]["sites"] = {
+#  "site-id": {
 #    "host_name": "host-name.localhost.localdomain",
 #    "host_aliases": ["backup"],
 #    "listen_ports": [80, 8080],
@@ -40,4 +39,4 @@ default["myrecipe"]["nginx_proxy"]["sites"] = [
 #    },
 #    "nested_proxy": false
 #  }
-]
+}

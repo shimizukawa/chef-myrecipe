@@ -80,9 +80,8 @@ Attributes
 
 * `node["myrecipe"]["nginx_proxy"]["sites"]` - nginx application proxy site array
 
-    [
-      {
-        "name": "server-name",            //required
+    {
+      "site-id": {                        //site-id for nginx conf file name
         "host_name": "example.jp",        //default is node['fqdn']
         "host_aliases": ["backup"],       //default is []
         "listen_ports": [80, 8080],       //default is [8080]
@@ -105,7 +104,7 @@ Attributes
         },
         "nested_proxy": false             //default is false. It is effective for ELB.
       }
-   ]
+   }
 
 * `node["myrecipe"]["rhodecode"]["work_dir"]` - default is "/var/www/rhodecode"
 * `node["myrecipe"]["rhodecode"]["bind"]` - default is "127.0.0.1:8000"
