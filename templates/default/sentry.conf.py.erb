@@ -100,6 +100,11 @@ EMAIL_HOST_USER = ''
 EMAIL_PORT = 25
 EMAIL_USE_TLS = False
 
+<%- if email_address -%>
+# The email address to send on behalf of
+SERVER_EMAIL = <%= @email_address %>
+<%- end -%>
+
 ###########
 ## etc. ##
 ###########

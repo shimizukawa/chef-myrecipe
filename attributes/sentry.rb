@@ -36,4 +36,5 @@ default["myrecipe"]["sentry"]["db_name"] = "sentry"
 default["myrecipe"]["sentry"]["db_user"] = "sentry"
 default["myrecipe"]["sentry"]["db_passwd"] = "sentry"
 default["myrecipe"]["sentry"]["allow_registration"] = false
+default["myrecipe"]["sentry"]["email_address"] = nil
 
