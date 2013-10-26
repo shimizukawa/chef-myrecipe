@@ -29,7 +29,7 @@ execute "virtualenv #{node.myrecipe.rhodecode.work_dir}" do
   not_if {File.exists? node.myrecipe.rhodecode.work_dir}
 end
 
-execute "#{node.myrecipe.rhodecode.work_dir}/bin/pip install python-ldap gunicorn rhodecode" do
+execute "#{node.myrecipe.rhodecode.work_dir}/bin/pip install python-ldap gunicorn https://rhodecode.com/dl/latest" do
   user node.myrecipe.rhodecode.user
   group node.myrecipe.rhodecode.group
   not_if {File.exists? "#{node.myrecipe.rhodecode.work_dir}/bin/rhodecode-api"}
@@ -45,12 +45,11 @@ template "#{node.myrecipe.rhodecode.work_dir}/production.ini" do
   end
 end
 
-execute "#{node.myrecipe.rhodecode.work_dir}/bin/paster setup-rhodecode production.ini" do
+execute "#{node.myrecipe.rhodecode.work_dir}/bin/paster upgrade-db production.ini --force-yes" do
   cwd node.myrecipe.rhodecode.work_dir
   user node.myrecipe.rhodecode.user
   group node.myrecipe.rhodecode.group
   subscribes :run, resources(:template => "#{node.myrecipe.rhodecode.work_dir}/production.ini")
-  not_if {File.exists? "#{node.myrecipe.rhodecode.work_dir}/rhodecode.db"}
 end
 
 template "/etc/init/rhodecode.conf" do
