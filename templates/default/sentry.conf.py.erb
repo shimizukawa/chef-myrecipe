@@ -37,8 +37,13 @@ CACHES = {
 # information on configuring your queue broker and workers.
 
 # You can enable queueing of jobs by turning off the always eager setting:
+<%- if @queue -%>
+CELERY_ALWAYS_EAGER = True
+BROKER_URL = '<%= @queue.broker %>'
+<%- else -%>
 # CELERY_ALWAYS_EAGER = False
 # BROKER_URL = 'redis://localhost:6379'
+<%- end -%>
 
 ####################
 ## Update Buffers ##
@@ -48,11 +53,15 @@ CACHES = {
 # database and the storage API. They will greatly improve efficiency on large
 # numbers of the same events being sent to the API in a short amount of time.
 
+<%- if @buffer -%>
+SENTRY_BUFFER = '<%= @buffer.backend %>'
+SENTRY_BUFFER_OPTIONS = <%= @buffer.options %>
+<%- else -%>
 # You'll need to install the required dependencies for Redis buffers:
 #   pip install redis hiredis nydus
 #
 # SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
-# SENTRY_REDIS_OPTIONS = {
+# SENTRY_BUFFER_OPTIONS = {
 #     'hosts': {
 #         0: {
 #             'host': '127.0.0.1',
@@ -60,6 +69,7 @@ CACHES = {
 #         }
 #     }
 # }
+<%- end -%>
 
 ################
 ## Web Server ##
@@ -105,6 +115,16 @@ EMAIL_USE_TLS = False
 SERVER_EMAIL = '<%= @email_address %>'
 <%- end -%>
 
+<%- if @use_udp -%>
+#########
+## udp ##
+#########
+
+SENTRY_UDP_HOST = '<%= @udp_host %>'
+SENTRY_UDP_PORT = <%= @udp_port %>
+
+<%- end -%>
+
 ###########
 ## etc. ##
 ###########
@@ -141,7 +161,4 @@ BITBUCKET_CONSUMER_SECRET = ''
 # custom
 
 SENTRY_ALLOW_REGISTRATION = <%= @allow_registration ? 'True': 'False' %>
-
-SENTRY_UDP_HOST = '<%= @udp_host %>'
-SENTRY_UDP_PORT = <%= @udp_port %>
 

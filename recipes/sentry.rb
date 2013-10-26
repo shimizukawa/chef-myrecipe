@@ -41,6 +41,20 @@ execute "#{node.myrecipe.sentry.work_dir}/bin/pip install sentry[mysql]" do
   not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/bin/sentry"}
 end
 
+if node.myrecipe.sentry.use_redis
+  execute "#{node.myrecipe.sentry.work_dir}/bin/pip install #{node.myrecipe.sentry.extra_packages.redis.join ' '}" do
+    user node.myrecipe.sentry.user
+    group node.myrecipe.sentry.group
+  end
+end
+
+if node.myrecipe.sentry.use_udp
+  execute "#{node.myrecipe.sentry.work_dir}/bin/pip install #{node.myrecipe.sentry.extra_packages.udp.join ' '}" do
+    user node.myrecipe.sentry.user
+    group node.myrecipe.sentry.group
+  end
+end
+
 template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
   source      "sentry.conf.py.erb"
   owner       node.myrecipe.sentry.user
@@ -70,6 +84,10 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
     :db_passwd => node.myrecipe.sentry.db_passwd,
     :allow_registration => node.myrecipe.sentry.allow_registration,
     :email_address => node.myrecipe.sentry.email_address,
+    :queue     => node.myrecipe.sentry.queue,
+    :buffer    => node.myrecipe.sentry.buffer,
+    :use_udp   => node.myrecipe.sentry.use_udp,
+    :use_redis => node.myrecipe.sentry.use_redis,
   )
 end
 
@@ -81,6 +99,23 @@ end
 
 template "/etc/init/sentry.conf" do
   source      "upstart-sentry.conf.erb"
+  owner       'root'
+  group       'root'
+  mode        '0644'
+end
+
+service 'sentry' do
+  provider Chef::Provider::Service::Upstart
+  enabled true
+  running true
+  supports :start => true, :restart => true, :reload => true, :status => true
+  action :start
+  subscribes :restart, resources(:template => "/etc/init/sentry.conf")
+end
+
+
+template "/etc/init/sentry-http.conf" do
+  source      "upstart-sentry-http.conf.erb"
   owner       'root'
   group       'root'
   mode        '0644'
@@ -98,6 +133,57 @@ service 'sentry' do
   running true
   supports :start => true, :restart => true, :reload => true, :status => true
   action :start
-  subscribes :restart, resources(:template => "/etc/init/sentry.conf")
+  subscribes :restart, resources(:template => "/etc/init/sentry-http.conf")
+end
+
+
+if node.myrecipe.sentry.use_udp
+  template "/etc/init/sentry-udp.conf" do
+    source      "upstart-sentry-udp.conf.erb"
+    owner       'root'
+    group       'root'
+    mode        '0644'
+    variables(
+      :work_dir  => node.myrecipe.sentry.work_dir,
+      :user      => node.myrecipe.sentry.user,
+      :group     => node.myrecipe.sentry.group,
+      :log_dir   => node.myrecipe.sentry.log_dir,
+    )
+  end
+
+  service 'sentry-udp' do
+    provider Chef::Provider::Service::Upstart
+    enabled true
+    running true
+    supports :start => true, :restart => true, :reload => true, :status => true
+    action :start
+    subscribes :restart, resources(:template => "/etc/init/sentry-udp.conf")
+  end
+
+end
+
+if node.myrecipe.sentry.queue
+  template "/etc/init/sentry-celery.conf" do
+    source      "upstart-sentry-celery.conf.erb"
+    owner       'root'
+    group       'root'
+    mode        '0644'
+    variables(
+      :work_dir  => node.myrecipe.sentry.work_dir,
+      :user      => node.myrecipe.sentry.user,
+      :group     => node.myrecipe.sentry.group,
+      :log_dir   => node.myrecipe.sentry.log_dir,
+    )
+  end
+
+  service 'sentry-celery' do
+    provider Chef::Provider::Service::Upstart
+    enabled true
+    running true
+    supports :start => true, :restart => true, :reload => true, :status => true
+    action :start
+    subscribes :restart, resources(:template => "/etc/init/sentry-celery.conf")
+  end
+
 end
 

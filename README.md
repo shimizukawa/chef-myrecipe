@@ -114,6 +114,48 @@ Attributes
 * `node["myrecipe"]["rhodecode"]["log_level"]` - default is "info"
 * `node["myrecipe"]["rhodecode"]["ini_cookbook"]` - default is nil
 
+
+* `node["myrecipe"]["sentry"]` - sentry application
+
+  {
+    "ini_cookbook": nil,             //if you use full custom sentry.conf.py, set your cookbook name.
+    "work_dir": "/var/www/sentry",   //sentry virtualenv dir
+    "url_prefix": "",                //your domain as: http://example.com/
+    "url_subpath": nil,              //subpath as: /sentry  (you need add subpath to url_prefix too)
+    "bind_host": "127.0.0.1",        //http server: bind host
+    "bind_port": "9000",             //http server: bind port
+    "proxy_proto": "https",          //http server: proxy protocol. if you use http frontend, set 'http'.
+    "workers": 2,                    //http server: worker nums
+    "user": "www",                   //sentry directory/file/process user
+    "group": "www",                  //sentry directory/file/process group
+    "log_level": "info",             //sentry application log level
+    "log_dir": "/var/log/sentry",    //sentry application log directory
+    "db_host": "localhost",          //mysql host
+    "db_port": 3306,                 //mysql port
+    "db_name": "sentry",             //mysql dbname
+    "db_user": "sentry",             //mysql user
+    "db_passwd": "sentry",           //mysql passwd
+    "allow_registration": false,     //allow registration for sentry site
+    "email_address": nil,            //email address for notify email
+
+    // udp
+    "use_udp": true,                 //set false if you didn't want to install extra packages relates to udp
+    "udp_host": "0.0.0.0",           //udp server: bind host
+    "udp_port": "9001",              //udp server: bind port
+    "extra_packages": {"udp": ['eventlet']},
+
+    // queue and buffer
+    "use_redis": true,               //set false if you didn't want to install extra packages relates to redis
+    "extra_packages": {"redis": ['redis', 'hiredis', 'nydus']},
+    "queue": nil,                    //set {"broker": "redis://localhost:6379/1"} if you want to use redis queue
+    "buffer": nil,
+        // configuration for builtin buffer
+        //{"backend": "sentry.buffer.base.Buffer", "options": "{'delay': 5}"}
+        // configuration for redis buffer
+        //{"backend": "sentry.buffer.redis.RedisBuffer", "options": "{'hosts': {0: {'host': 'localhost', 'port': 6379, 'db': 2}}}"}
+  }
+
+
 Data bags
 ----------
 

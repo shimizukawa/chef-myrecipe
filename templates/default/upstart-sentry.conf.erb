@@ -8,29 +8,4 @@ description "Sentry"
 
 start on runlevel [2345]
 stop on runlevel [!2345]
-#Send KILL after 5 seconds
-kill timeout 5
-respawn
 
-<%- case node["platform_family"] -%>
-<%- when "debian" -%>
-setuid <%= @user %>
-setgid <%= @group %>
-<%- end -%>
-
-env VENV="<%= @work_dir %>"
-
-pre-start script
-  test -f $VENV/bin/sentry || test -f $VENV/sentry.conf.py || { stop ; exit 0; }
-end script
-
-script
-  sleep 2
-  exec >> <%= @log_dir %>/sentry-console.log 2>&1
-<%- case node["platform_family"] -%>
-<%- when "debian" -%>
-  exec $VENV/bin/sentry --config=$VENV/sentry.conf.py start
-<%- when "rhel", "fedora", "suse" -%>
-  exec sudo -u <%= @user %> -g <%= @group %> sh -c "<%= @work_dir %>/bin/sentry --config=<%= @work_dir %>/sentry.conf.py start"
-<%- end -%>
-end script
