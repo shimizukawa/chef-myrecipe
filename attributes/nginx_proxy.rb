@@ -1,5 +1,5 @@
 # Cookbook Name:: myrecipe
-# Attributes:: nginx_jenkins
+# Attributes:: nginx_proxy
 #
 # Copyright 2013, Takayuki SHIMIZUKAWA
 #
