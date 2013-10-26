@@ -19,6 +19,7 @@ setgid <%= @group %>
 <%- end -%>
 
 env VENV="<%= @work_dir %>"
+env SENTRY_CMD="$VENV/bin/sentry --config=$VENV/sentry.conf.py start udp"
 
 pre-start script
   test -f $VENV/bin/sentry || test -f $VENV/sentry.conf.py || { stop ; exit 0; }
@@ -29,8 +30,8 @@ script
   exec >> <%= @log_dir %>/sentry-console.log 2>&1
 <%- case node["platform_family"] -%>
 <%- when "debian" -%>
-  exec $VENV/bin/sentry --config=$VENV/sentry.conf.py start
+  exec $SENTRY_CMD
 <%- when "rhel", "fedora", "suse" -%>
-  exec sudo -u <%= @user %> -g <%= @group %> sh -c "<%= @work_dir %>/bin/sentry --config=<%= @work_dir %>/sentry.conf.py udp"
+  exec sudo -u <%= @user %> -g <%= @group %> sh -c "$SENTRY_CMD"
 <%- end -%>
 end script

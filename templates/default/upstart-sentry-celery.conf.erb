@@ -19,6 +19,8 @@ setgid <%= @group %>
 <%- end -%>
 
 env VENV="<%= @work_dir %>"
+env LOGDIR="<%= @log_dir %>"
+env SENTRY_CMD="$VENV/bin/sentry --config=$VENV/sentry.conf.py celery worker -B -s $LOGDIR/celerybeat-schedule"
 
 pre-start script
   test -f $VENV/bin/sentry || test -f $VENV/sentry.conf.py || { stop ; exit 0; }
@@ -26,11 +28,11 @@ end script
 
 script
   sleep 2
-  exec >> <%= @log_dir %>/sentry-console.log 2>&1
+  exec >> $LOGDIR/sentry-celery-console.log 2>&1
 <%- case node["platform_family"] -%>
 <%- when "debian" -%>
-  exec $VENV/bin/sentry --config=$VENV/sentry.conf.py celery worker -B
+  exec $SENTRY_CMD
 <%- when "rhel", "fedora", "suse" -%>
-  exec sudo -u <%= @user %> -g <%= @group %> sh -c "$VENV/bin/sentry --config=$VENV/sentry.conf.py celery worker -B"
+  exec sudo -u <%= @user %> -g <%= @group %> sh -c "$SENTRY_CMD"
 <%- end -%>
 end script
