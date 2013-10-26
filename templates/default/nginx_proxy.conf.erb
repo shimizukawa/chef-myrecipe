@@ -4,11 +4,13 @@
 # Local modifications will be overwritten.
 #
 
+<%- unless @upstream_servers.empty? -%>
 upstream <%= @site_name %> {
 <% @upstream_servers.each do |server| -%>
   server <%= server %>;
 <% end -%>
 }
+<%- end -%>
 
 <% if @www_redirect -%>
 server {
@@ -50,7 +52,9 @@ server {
 
 <% unless @locations.include? '/' -%>
   location / {
+<%- unless @upstream_servers.empty? -%>
     proxy_pass http://<%= @site_name %>;
+<%- end -%>
 <% if @ssl -%>
     proxy_redirect http:// https://;
 <% end -%>
