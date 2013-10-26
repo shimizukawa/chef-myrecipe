@@ -20,7 +20,7 @@ setgid <%= @group %>
 
 env VENV="<%= @work_dir %>"
 env LOGDIR="<%= @log_dir %>"
-env SENTRY_CMD="$VENV/bin/sentry --config=$VENV/sentry.conf.py celery worker -B -s $LOGDIR/celerybeat-schedule"
+env SENTRY_CMD="<%= @work_dir %>/bin/sentry --config=<%= @work_dir %>/sentry.conf.py celery worker -B -s <%= @log_dir %>/celerybeat-schedule"
 
 pre-start script
   test -f $VENV/bin/sentry || test -f $VENV/sentry.conf.py || { stop ; exit 0; }
