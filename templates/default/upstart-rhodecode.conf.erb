@@ -17,10 +17,10 @@ env HGENCODING="UTF-8"
 export HGENCODING
 
 pre-start script
-  test -f $VENV/bin/gunicorn_paster || tset -f $VENV/production.ini || { stop ; exit 0; }
+  test -f $VENV/bin/gunicorn || tset -f $VENV/production.ini || { stop ; exit 0; }
 end script
 
 script
-  exec $VENV/bin/gunicorn_paster --user <%= @user %> --preload -w <%= @workers %> --log-level <%= @log_level %> --log-file $VENV/gunicorn.log -b <%= @bind %> $VENV/production.ini
+  exec $VENV/bin/gunicorn --paste $VENV/production.ini --user <%= @user %> --preload -w <%= @workers %> --log-level <%= @log_level %> --log-file $VENV/gunicorn.log -b <%= @bind %>
 end script
 
