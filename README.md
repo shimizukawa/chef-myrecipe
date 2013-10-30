@@ -144,6 +144,10 @@ Attributes
     "udp_port": "9001",              //udp server: bind port
     "extra_packages": {"udp": ['eventlet']},
 
+    // cache
+    "cache": nil,                    //set {"locations": ['127.0.0.1:11211']} if you want to use memcached cache
+    "extra_packages": {"cache": ['python-memcached']},
+
     // queue and buffer
     "use_redis": true,               //set false if you didn't want to install extra packages relates to redis
     "extra_packages": {"redis": ['redis', 'hiredis', 'nydus']},

@@ -36,6 +36,13 @@ default["myrecipe"]["sentry"]["db_passwd"] = "sentry"
 default["myrecipe"]["sentry"]["allow_registration"] = false
 default["myrecipe"]["sentry"]["email_address"] = nil
 
+####################
+# cache
+
+default["myrecipe"]["sentry"]["cache"] = nil
+## for memcached cache
+#default["myrecipe"]["sentry"]["cache"]["locations"] = ['127.0.0.1:11211']
+
 
 ####################
 # queue & buffer

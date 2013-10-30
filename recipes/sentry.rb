@@ -41,6 +41,13 @@ execute "#{node.myrecipe.sentry.work_dir}/bin/pip install sentry[mysql]" do
   not_if {File.exists? "#{node.myrecipe.sentry.work_dir}/bin/sentry"}
 end
 
+if node.myrecipe.sentry.cache
+  execute "#{node.myrecipe.sentry.work_dir}/bin/pip install #{node.myrecipe.sentry.extra_packages.cache.join ' '}" do
+    user node.myrecipe.sentry.user
+    group node.myrecipe.sentry.group
+  end
+end
+
 if node.myrecipe.sentry.use_redis
   execute "#{node.myrecipe.sentry.work_dir}/bin/pip install #{node.myrecipe.sentry.extra_packages.redis.join ' '}" do
     user node.myrecipe.sentry.user
@@ -84,6 +91,7 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
     :db_passwd => node.myrecipe.sentry.db_passwd,
     :allow_registration => node.myrecipe.sentry.allow_registration,
     :email_address => node.myrecipe.sentry.email_address,
+    :cache     => node.myrecipe.sentry.cache,
     :queue     => node.myrecipe.sentry.queue,
     :buffer    => node.myrecipe.sentry.buffer,
     :use_udp   => node.myrecipe.sentry.use_udp,
