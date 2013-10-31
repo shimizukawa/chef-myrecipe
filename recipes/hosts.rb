@@ -26,6 +26,7 @@ if item
     hostsfile_entry h['ipaddr'] do
       hostname id
       aliases h['aliases']
+      unique h['unique']
     end
   end
 else

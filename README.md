@@ -185,7 +185,8 @@ example2, `data_bags/hosts/production.json`:
 {
   "id": "production",
   "host-workstation": {
-    "ipaddr": "10.0.0.1"
+    "ipaddr": "10.0.0.1",
+    "unique": true
   },
   "host-ap1": {
     "ipaddr": "10.0.0.2",
