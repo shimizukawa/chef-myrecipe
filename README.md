@@ -194,6 +194,21 @@ example2, `data_bags/hosts/production.json`:
 }
 ```
 
+example3, `data_bags/hosts/production.json`:
+```json
+{
+  "id": "production",
+  "host-workstation": {
+    //"ipaddr": "", <- IP address is auto resolved by hostname ('host-workstation')
+    "aliases": [
+      "host-ap1",
+      "host-ap2",
+      ...
+    ]
+  }
+}
+```
+
 
 file `data_bags/certificates/certificates.json` used by `myrecipe::certificates`:
 

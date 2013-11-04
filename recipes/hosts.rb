@@ -17,12 +17,21 @@
 # limitations under the License.
 #
 
+require 'socket'
+
 env_name = node.my_environment #FIXME: chef-solo (11.4.4) did not support "node.chef_environment" yet.
 item = data_bag_item('hosts', env_name)
 
 if item
   item.each do |id, h|
-    next unless h['ipaddr']
+    unless h['ipaddr']
+      begin
+        h['ipaddr'] = IPSocket.getaddress(id)
+      rescue
+        Chef::Log.warn("#{id}: does not have 'ipaddr' attribute and it does not resolve IP address.")
+        next
+      end
+    end
     hostsfile_entry h['ipaddr'] do
       hostname id
       aliases h['aliases']
