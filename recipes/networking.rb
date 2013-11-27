@@ -33,7 +33,19 @@ if gatewaydev
           EOH
       cwd "/tmp"
     end
-  
+
   end
+
+end
+
+if node['platform_family'] == 'rhel' and node['platform_version'] =~ /^6/
+    bash "update resolve.conf file" do
+      code <<-EOH
+          if [ -z `cat /etc/resolv.conf | grep single-request-reopen` ]; then
+                echo "options single-request-reopen" >> /etc/resolv.conf
+          fi
+          EOH
+      cwd "/tmp"
+    end
 
 end
