@@ -27,3 +27,7 @@ file "/root/.my.cnf" do
   group 'root'
   mode '0600'
 end
+
+directory node.mysql.data_dir do
+  mode '02755'
+end
