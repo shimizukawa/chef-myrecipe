@@ -254,7 +254,8 @@ Recipes
 * `myrecipe::mysql_grants` - grant users for mysql
 * `myrecipe::mysql_databases` - create mysql databases
 * `myrecipe::mysql_extraconf` - create extra configuration file that work with mysql recipe.
-* `myrecipe::mysql` - create some configuration file.
+* `myrecipe::mysql_server` - postprocess for server directory.
+* `myrecipe::mysql_backup` - create some configuration file for backup.
 * `myrecipe::nginx_proxy` - setup nginx proxy site setting.
 * `myrecipe::rhodecode` - setup rhadcode application.
 * `myrecipe::remote_old_mongo` - uninstall old (before 2.4) mongodb packages.

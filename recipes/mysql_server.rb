@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: myrecipe
-# Recipe:: mysql
+# Recipe:: mysql_server
 #
 # Copyright 2013, Takayuki SHIMIZUKAWA
 #
@@ -16,17 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-file "/root/.my.cnf" do
-  content <<-EOH
-    [mysqladmin]
-    user= root
-    password = #{node.mysql.server_root_password}
-  EOH
-  owner 'root'
-  group 'root'
-  mode '0600'
-end
 
 directory node.mysql.data_dir do
   mode '02755'
