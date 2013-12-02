@@ -90,7 +90,7 @@ template "#{node.myrecipe.sentry.work_dir}/sentry.conf.py" do
     :db_user   => node.myrecipe.sentry.db_user,
     :db_passwd => node.myrecipe.sentry.db_passwd,
     :allow_registration => node.myrecipe.sentry.allow_registration,
-    :email_address => node.myrecipe.sentry.email_address,
+    :email     => node.myrecipe.sentry.email,
     :cache     => node.myrecipe.sentry.cache,
     :queue     => node.myrecipe.sentry.queue,
     :buffer    => node.myrecipe.sentry.buffer,
