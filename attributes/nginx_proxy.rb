@@ -31,6 +31,9 @@ default["myrecipe"]["nginx_proxy"]["sites"] = {
 #      "realm": "realm name",
 #      "htpasswd": "htpasswd-file"
 #    },
+#    "extra_lines": [
+#      "rewrite /foo/(.*) $1 permanent"
+#    ],
 #    "locations": {
 #      "= /_health": [
 #        "return 200 'good.';",

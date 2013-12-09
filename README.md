@@ -96,6 +96,9 @@ Attributes
           "realm": "realm-name",
           "htpasswd": "htpasswd-file-path"
         },
+        "extra_lines": [
+          "rewrite /foo/(.*) $1 permanent"
+        ],
         "locations": {                    //default is {}
           "= /_health": [
             "return 200 'good.';",

@@ -38,6 +38,7 @@ node.myrecipe.nginx_proxy.sites.each do |site_name, site|
       :ssl_name         => site['ssl_name'],
       :ssl_path         => site['ssl_path'] || node.myrecipe.certificates.path || '/etc/ssl/private',
       :basicauth        => site['basicauth'] || nil,
+      :extra_lines      => site['extra_lines'] || [],
       :locations        => site['locations'] || {},
       :nested_proxy     => site['nested_proxy'] || false,
     )

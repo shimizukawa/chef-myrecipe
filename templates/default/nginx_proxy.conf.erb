@@ -50,6 +50,10 @@ server {
   proxy_set_header X-Real-IP $remote_addr;
 <% end -%>
 
+<% @extra_lines.each do |line| -%>
+  <%= line %>
+<% end -%>
+
 <% unless @locations.include? '/' -%>
   location / {
 <%- unless @upstream_servers.empty? -%>
