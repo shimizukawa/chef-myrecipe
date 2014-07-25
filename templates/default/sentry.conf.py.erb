@@ -41,6 +41,7 @@ CACHES = {
 # You can enable queueing of jobs by turning off the always eager setting:
 <%- if @queue -%>
 CELERY_ALWAYS_EAGER = False
+BROKER_CONNECTION_RETRY = True
 BROKER_URL = '<%= @queue.broker %>'
 <%- else -%>
 # CELERY_ALWAYS_EAGER = False
